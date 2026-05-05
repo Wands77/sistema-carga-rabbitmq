@@ -1,0 +1,48 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-broker
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - rabbitmq-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  generator:
+    build: ./generator
+    container_name: message-generator
+    restart: on-failure  # <--- LINHA NOVA AQUI
+    networks:
+      - rabbitmq-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  consumer-plate:
+    build: ./consumer-plate
+    container_name: consumer-plate-ai
+    restart: on-failure  # <--- LINHA NOVA AQUI
+    networks:
+      - rabbitmq-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  consumer-sign:
+    build: ./consumer-sign
+    container_name: consumer-sign-ai
+    restart: on-failure  # <--- LINHA NOVA AQUI
+    networks:
+      - rabbitmq-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+networks:
+  rabbitmq-net:
+    driver: bridge

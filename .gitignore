@@ -1,0 +1,8 @@
+# Ignorar pastas de build do Java
+target/
+*.jar
+
+# Ignorar pastas de IDE
+.idea/
+.vscode/
+*.iml
