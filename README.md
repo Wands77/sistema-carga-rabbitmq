@@ -22,7 +22,15 @@ Em conformidade com os requisitos técnicos do sistema, a taxa de processamento 
    ```
 4. Acesse a interface administrativa do RabbitMQ através do navegador: `http://localhost:15672`.
    * **Credenciais padrão:** `guest` / `guest`
-5. Navegue até a aba **Queues** para monitorar o crescimento do enfileiramento das mensagens em tempo real.
+5. Navegue até a aba **Queues and Streams** para monitorar o crescimento do enfileiramento das mensagens em tempo real.
+   Você poderá visualizar o monitoramento das Filas no RabbitMQ
+   A imagem abaixo apresenta o painel administrativo durante a execução do sistema, comprovando o funcionamento da nossa arquitetura distribuída:
+   
+   <img width="1357" height="646" alt="image" src="https://github.com/user-attachments/assets/a6a53324-778a-47a2-91e7-612f1212e699" />
+   
+   * **Roteamento Bem-Sucedido:** O *Topic Exchange* está dividindo corretamente as mensagens recebidas em duas filas independentes (`fila_placas` e `fila_sinais`),        baseando-se nas *routing keys*.
+   * **Status Ativo:** A coluna *State* como `running` confirma que os containers dos nossos consumidores em Java estão conectados e escutando as filas.
+   * **Taxa de Transferência (Message rates):** A coluna *incoming* mostra a carga constante sendo injetada pelo nosso `generator` (ex: 4.2/s para placas e 2.4/s para sinais), enquanto *deliver / get* mostra a taxa em que as IAs estão puxando essas mensagens para processamento.
 
 6. Exemplo de Funcionamento (Logs)
 
@@ -48,15 +56,6 @@ Em conformidade com os requisitos técnicos do sistema, a taxa de processamento 
    consumer-sign-ai   |      -> [IA 2] Identificando formato e cor do sinal...
    consumer-sign-ai   |      -> [IA 2] Classificando classe com Smile (Pare, Velocidade, Proibido)...
    ```
-7. Monitoramento das Filas no RabbitMQ
-   A imagem abaixo apresenta o painel administrativo do RabbitMQ (Management UI) durante a execução do sistema, comprovando o funcionamento da nossa arquitetura distribuída:
-   
-   <img width="1357" height="646" alt="image" src="https://github.com/user-attachments/assets/a6a53324-778a-47a2-91e7-612f1212e699" />
-   
-   * **Roteamento Bem-Sucedido:** O *Topic Exchange* está dividindo corretamente as mensagens recebidas em duas filas independentes (`fila_placas` e `fila_sinais`),        baseando-se nas *routing keys*.
-   * **Status Ativo:** A coluna *State* como `running` confirma que os containers dos nossos consumidores em Java estão conectados e escutando as filas.
-   * **Taxa de Transferência (Message rates):** A coluna *incoming* mostra a carga constante sendo injetada pelo nosso `generator` (ex: 4.2/s para placas e 2.4/s para sinais), enquanto *deliver / get* mostra a taxa em que as IAs estão puxando essas mensagens para processamento.
-   
 
 ## 🛠️ Tecnologias Utilizadas
 * Java 11 (Eclipse Temurin)
