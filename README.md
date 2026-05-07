@@ -18,7 +18,7 @@ Em conformidade com os requisitos técnicos do sistema, a taxa de processamento 
 2. Clone este repositório.
 3. Na raiz do projeto, suba os containers executando o comando:
    ```bash
-   docker-compose up
+   docker-compose up --build
    ```
 4. Acesse a interface administrativa do RabbitMQ através do navegador: `http://localhost:15672`.
    * **Credenciais padrão:** `guest` / `guest`
