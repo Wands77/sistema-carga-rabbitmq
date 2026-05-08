@@ -25,6 +25,7 @@ public class PlateConsumer {
         
         // Faz o bind para pegar mensagens de placas (routing key termina em .plate)
         channel.queueBind(queueName, EXCHANGE_NAME, "*.plate");
+        channel.basicQos(1);
 
         System.out.println(" [*] Consumidor de Placas (IA 1) aguardando mensagens.");
 
@@ -33,8 +34,9 @@ public class PlateConsumer {
             System.out.println(" [x] Recebido: '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
             
             processImageWithSmile(message);
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         };
-        channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
+        channel.basicConsume(queueName, false, deliverCallback, consumerTag -> { });
     }
 
     private static void processImageWithSmile(String imagePayload) {
