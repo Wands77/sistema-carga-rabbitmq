@@ -21,6 +21,7 @@ public class SignConsumer {
         
         // Faz o bind para pegar apenas mensagens de sinais
         channel.queueBind(queueName, EXCHANGE_NAME, "*.sign");
+        channel.basicQos(1);
 
         System.out.println(" [*] Consumidor de Sinais (IA 2) aguardando mensagens.");
 
@@ -29,8 +30,9 @@ public class SignConsumer {
             System.out.println(" [x] Recebido: '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
             
             processImageWithSmile(message);
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         };
-        channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
+        channel.basicConsume(queueName, false, deliverCallback, consumerTag -> { });
     }
 
     private static void processImageWithSmile(String imagePayload) {
